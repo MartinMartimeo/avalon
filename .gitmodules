@@ -1,6 +1,15 @@
 [submodule "api/tornado_menumaker"]
 	path = api/tornado_menumaker
 	url = git@github.com:MartinMartimeo/tornado-menumaker.git
+	branch = master
+	update = merge
 [submodule "api/tornado_restless"]
 	path = api/tornado_restless
 	url = git@github.com:MartinMartimeo/tornado-restless.git
+	branch = master
+	update = merge
+[submodule "api/tornado_backbone"]
+	path = api/tornado_backbone
+	url = git@github.com:MartinMartimeo/tornado-backbone.git
+	branch = master
+	update = merge
