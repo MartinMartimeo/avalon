@@ -20,6 +20,9 @@ from tornado.web import Application
 from tornado.ioloop import IOLoop
 from tornado_menumaker import page, index, subpage, routes
 
+from tornado_restless import ApiManager as RestlessManager
+from tornado_backbone import ApiManager as BackboneManager
+
 from . import logger
 
 
@@ -34,9 +37,28 @@ class Application(Application):
             if not key.startswith("_"):
                 settings.setdefault(key, getattr(environment, key))
 
+        from base.handler import RequestHandler
+
         super().__init__(routes(), **settings)
 
-        self.database
+        self.create_api()
+
+    def create_api(self) -> "[ApiManager, ApiManager]":
+        """
+            Restless & Backbone API
+        """
+        logger.debug("Create Api Engine")
+
+        restless = RestlessManager(application=self, Session=self.database)
+        backbone = BackboneManager(application=self)
+
+        from models import character, room
+
+        models = [character.DbCharacter, room.DbRoom]
+
+        for model in models:
+            restless.create_api(model)
+            backbone.create_api(model)
 
     @staticmethod
     def start():
@@ -71,7 +93,7 @@ class Application(Application):
         session = scope()
 
         for char in yaml.load(open('data/characters.yaml')):
-            logger.log(char)
+            logger.debug(char)
             char = character.DbCharacter(**char)
             session.merge(char)
 
