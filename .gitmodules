@@ -1,0 +1,6 @@
+[submodule "api/tornado_menumaker"]
+	path = api/tornado_menumaker
+	url = git@github.com:MartinMartimeo/tornado-menumaker.git
+[submodule "api/tornado_restless"]
+	path = api/tornado_restless
+	url = git@github.com:MartinMartimeo/tornado-restless.git
