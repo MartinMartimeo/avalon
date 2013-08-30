@@ -1,0 +1,47 @@
+  - _id: percival
+    name_en: Percival
+    min_count: 0
+    may_fail: False
+    is_evil: False
+
+  - _id: merlin
+    name_en: Merlin
+    min_count: 1
+    may_fail: False
+    is_evil: False
+
+  - _id: assassin
+    name_en: Assassin
+    min_count: 1
+    may_fail: True
+    is_evil: True
+
+  - _id: morgana
+    name_en: Morgana
+    min_count: 0
+    may_fail: True
+    is_evil: True
+
+  - _id: oberon
+    name_en: Oberon
+    min_count: 0
+    may_fail: True
+    is_evil: True
+
+  - _id: mordred
+    name_en: Mordred
+    min_count: 0
+    may_fail: True
+    is_evil: True
+
+  - _id: servant
+    name_en: Loyal Servant of Arthur
+    min_count: 0
+    may_fail: False
+    is_evil: False
+
+  - _id: spy
+    name_en: Minion of Mordred
+    min_count: 0
+    may_fail: True
+    is_evil: True

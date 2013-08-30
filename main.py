@@ -6,6 +6,7 @@
 __author__ = 'Martin Martimeo <martin@martimeo.de>'
 __date__ = '30.08.13 - 17:57'
 
+import environment
 import os
 import site
 import sys
@@ -17,7 +18,7 @@ if sys.hexversion < 0x03030000:
 from base.application import Application
 
 from tornado.options import define, options, parse_command_line
-define("port", default=4070, help="run on the given port", type=int)
+define("port", default=environment.port, help="run on the given port", type=int)
 
 # Add Apis
 for api in next(os.walk(os.path.join(os.path.dirname(__file__), "api")))[1]:

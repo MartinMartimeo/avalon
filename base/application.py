@@ -7,7 +7,9 @@
 __author__ = 'Martin Martimeo <martin@martimeo.de>'
 __date__ = '30.08.13 - 18:00'
 
+import environment
 import os
+import yaml
 
 from alembic.util import memoized_property
 
@@ -26,18 +28,15 @@ class Application(Application):
         Base Class
     """
 
-    SETTINGS = {
-        'template_path': os.path.join(os.path.dirname(__file__), "..", "templates"),
-        'static_path': os.path.join(os.path.dirname(__file__), "..", "static"),
-        'dns': 'sqlite:///:memory:'
-    }
-
     def __init__(self, **settings):
 
-        for item in self.SETTINGS.items():
-            settings.setdefault(*item)
+        for key in dir(environment):
+            if not key.startswith("_"):
+                settings.setdefault(key, getattr(environment, key))
 
         super().__init__(routes(), **settings)
+
+        self.database
 
     @staticmethod
     def start():
@@ -50,7 +49,7 @@ class Application(Application):
     @memoized_property
     def database(self) -> sessionmaker:
         """
-            constructs the database connection
+            constructs the database connection and fills it with data
         """
 
         logger.info('Starting database connection')
@@ -62,14 +61,23 @@ class Application(Application):
             engine = create_engine(dns)
         engine.connect()
 
-        from models import metadata
+        from models import metadata, character, room
 
         metadata.bind = engine
         metadata.create_all(engine)
 
         factory = sessionmaker(bind=engine, autoflush=True)
-        return scoped_session(factory)
+        scope = scoped_session(factory)
+        session = scope()
 
+        for char in yaml.load(open('data/characters.yaml')):
+            logger.log(char)
+            char = character.DbCharacter(**char)
+            session.merge(char)
 
+        session.commit()
+        session.close()
+
+        return scope
 
 

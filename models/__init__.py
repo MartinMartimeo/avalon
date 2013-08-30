@@ -11,7 +11,6 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
 metadata = schema.MetaData()
 
-
 class Base(object):
     """
         Base class for all database models
@@ -44,10 +43,11 @@ class Base(object):
         """
         from .types.date import DateTime
 
-        return DateTime(server_onupdate=text('now'), info=dict(readonly=True))
+        return DateTime(server_default=text('now'), server_onupdate=text('now'), info=dict(readonly=True))
 
     def __repr__(self):
         return "<%s %s />" % (self.__class__.__name__, " ".join("%s='%s'" % (k, v) for k, v in self.__asdict__()))
 
 
 Base = declarative_base(metadata=metadata, cls=Base)
+
