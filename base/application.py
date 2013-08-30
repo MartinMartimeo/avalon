@@ -65,6 +65,7 @@ class Application(Application):
         from models import metadata
 
         metadata.bind = engine
+        metadata.create_all(engine)
 
         factory = sessionmaker(bind=engine, autoflush=True)
         return scoped_session(factory)
