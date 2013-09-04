@@ -49,7 +49,7 @@ class Application(Application):
         """
         logger.debug("Create Api Engine")
 
-        restless = RestlessManager(application=self, Session=self.database)
+        restless = RestlessManager(application=self, session_maker=self.database)
         backbone = BackboneManager(application=self)
 
         from models import character, room
