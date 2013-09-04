@@ -53,11 +53,20 @@ class RequestHandler(RequestHandler):
         right = ""
         self.render('app.tpl', left=left, right=right)
 
-    @subpage('/rooms')
-    def rooms(self):
+    @subpage('/(\w{4,})')
+    def page(self, page):
         """
-            Rooms
+            Page
         """
-        left = self.render_string('rooms.tpl')
+        left = self.render_string('%s.tpl' % page)
         right = ""
+        return self.render('app.tpl', left=left, right=right)
+
+    @subpage('/(\w{4,})/(\w+)')
+    def subpage(self, page, sub):
+        """
+            Sub Page
+        """
+        left = self.render_string('%s.tpl' % page)
+        right = self.render_string('%s-%s.tpl' % (page, sub))
         return self.render('app.tpl', left=left, right=right)
