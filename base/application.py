@@ -57,7 +57,7 @@ class Application(Application):
         models = [character.DbCharacter, room.DbRoom]
 
         for model in models:
-            restless.create_api(model)
+            restless.create_api(model, methods=RestlessManager.METHODS_ALL)
             backbone.create_api(model)
 
     @staticmethod
