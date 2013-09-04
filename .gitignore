@@ -42,3 +42,7 @@ validation-staus.json
 .CVS
 .idea
 node_modules
+
+# Python
+__pycache__
+*.py[oc]

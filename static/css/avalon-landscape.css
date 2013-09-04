@@ -1,0 +1,11 @@
+.show-landscape {
+    display: block;
+}
+
+.hide-landscape {
+    display: none;
+}
+
+.show-portrait {
+    display: none;
+}

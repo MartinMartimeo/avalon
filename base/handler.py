@@ -9,7 +9,7 @@ __date__ = '30.08.13 - 22:39'
 
 from alembic.util import memoized_property
 
-from tornado_menumaker import page, index
+from tornado_menumaker import page, index, subpage
 from tornado.web import RequestHandler
 
 
@@ -21,6 +21,21 @@ class RequestHandler(RequestHandler):
 
     def initialize(self, **kwargs):
         pass
+
+    @property
+    def is_ajax(self):
+        """
+            Is this an ajax query?
+        """
+        return self.request.headers.get('X-Requested-With') == "XMLHttpRequest"
+
+    def get_template_namespace(self):
+        """
+            Inject tempalte namesapce vara
+        """
+        namespace = super().get_template_namespace()
+        namespace["is_ajax"] = self.is_ajax
+        return namespace
 
     @memoized_property
     def db(self):
@@ -34,5 +49,15 @@ class RequestHandler(RequestHandler):
         """
             Index Page
         """
+        left = ""
+        right = ""
+        self.render('app.tpl', left=left, right=right)
 
-        self.render('app.tpl')
+    @subpage('/rooms')
+    def rooms(self):
+        """
+            Rooms
+        """
+        left = self.render_string('rooms.tpl')
+        right = ""
+        return self.render('app.tpl', left=left, right=right)

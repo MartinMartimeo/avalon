@@ -27,6 +27,6 @@ for api in next(os.walk(os.path.join(os.path.dirname(__file__), "api")))[1]:
 if __name__ == "__main__":
     parse_command_line()
 
-    app = Application()
+    app = Application(debug=True)
     app.listen(options.port)
     app.start()
