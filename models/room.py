@@ -24,6 +24,6 @@ class DbRoom(Base):
 
     _id = Id("room_id")
 
-    name = String(maxlen=80)
+    name = String(maxlen=80, unique=True)
     name.doc = "Name of the Room for display"
 
