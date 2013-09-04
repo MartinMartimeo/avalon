@@ -6,10 +6,11 @@
 __author__ = 'Martin Martimeo <martin@martimeo.de>'
 __date__ = '30.08.13 - 18:38'
 
-from sqlalchemy import schema, text
+from sqlalchemy import schema, text, func
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
 metadata = schema.MetaData()
+
 
 class Base(object):
     """
@@ -34,7 +35,7 @@ class Base(object):
         """
         from .types.date import DateTime
 
-        return DateTime(server_default=text('now'), info=dict(readonly=True))
+        return DateTime(server_default=func.now(), info=dict(readonly=True))
 
     @declared_attr
     def modified(self):
@@ -43,7 +44,7 @@ class Base(object):
         """
         from .types.date import DateTime
 
-        return DateTime(server_default=text('now'), server_onupdate=text('now'), info=dict(readonly=True))
+        return DateTime(server_default=func.now(), server_onupdate=func.now(), info=dict(readonly=True))
 
     def __repr__(self):
         return "<%s %s />" % (self.__class__.__name__, " ".join("%s='%s'" % (k, v) for k, v in self.__asdict__()))
