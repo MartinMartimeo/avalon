@@ -62,7 +62,17 @@ class RequestHandler(RequestHandler):
         right = ""
         return self.render('app.tpl', left=left, right=right)
 
-    @subpage('/(\w{4,})/(\w+)')
+    @subpage('/(\w{4,})/(\d+)')
+    def showpage(self, page, instance_id):
+        model = self.application.models[page]
+        instance = self.db.query(model).filter(model._id == instance_id).one()
+
+        left = self.render_string('%s.tpl' % page)
+        right = self.render_string('%s-%s.tpl' % (page, "show"), instance=instance)
+
+        return self.render('app.tpl', left=left, right=right)
+
+    @subpage('/(\w{4,})/([^\d]\w*)')
     def subpage(self, page, sub):
         """
             Sub Page

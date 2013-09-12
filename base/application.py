@@ -32,6 +32,9 @@ class Application(Application):
         Base Class
     """
 
+    models = {model.__tablename__: model for model in
+              [character.DbCharacter, room.DbRoom, room.DbRoom2Character, user.DbUser]}
+
     def __init__(self, **settings):
 
         for key in dir(environment):
@@ -54,9 +57,7 @@ class Application(Application):
         restless = RestlessManager(application=self, session_maker=self.database)
         backbone = BackboneManager(application=self)
 
-        models = [character.DbCharacter, room.DbRoom, room.DbRoom2Character, user.DbUser]
-
-        for model in models:
+        for model in self.models.values():
             restless.create_api(model,
                                 methods=RestlessManager.METHODS_ALL,
                                 postprocessor=dict(
