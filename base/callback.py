@@ -22,4 +22,4 @@ def after_redirect(result: dict, model: ModelWrapper, handler: RequestHandler, *
     """
 
     primary_key = len(model.primary_keys) > 1 and tuple(model.primary_keys) or list(model.primary_keys)[0]
-    handler.redirect(url=urljoin(url, "?%s=%s" % (model.__collectionname__, result[primary_key])))
+    handler.redirect(url=urljoin(url, "%s/%s" % (model.__collectionname__, result[primary_key])))

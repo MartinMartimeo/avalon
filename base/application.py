@@ -60,7 +60,7 @@ class Application(Application):
             restless.create_api(model,
                                 methods=RestlessManager.METHODS_ALL,
                                 postprocessor=dict(
-                                    post=[partial(after_redirect, url="/%s/show" % model.__tablename__)]))
+                                    post=[partial(after_redirect, url="/")]))
             backbone.create_api(model)
 
     @staticmethod
