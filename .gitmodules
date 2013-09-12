@@ -11,5 +11,5 @@
 [submodule "api/tornado_backbone"]
 	path = api/tornado_backbone
 	url = git@github.com:MartinMartimeo/tornado-backbone.git
-	branch = master
+	branch = dev
 	update = merge
