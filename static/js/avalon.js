@@ -11,7 +11,8 @@ require.config({
         backbone: "http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min",
 
         "backbone-relational": "http://cdnjs.cloudflare.com/ajax/libs/backbone-relational/0.8.5/backbone-relational.min",
-        "backbone-forms": "http://cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.12.0/backbone-forms.min"
+
+        "backbone-forms": "/static/js/backbone-forms"
     },
     shim: {
         underscore: {
