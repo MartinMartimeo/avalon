@@ -12,14 +12,18 @@ __author__ = 'Martin Martimeo <martin@martimeo.de>'
 __date__ = '13.04.13 - 16:13'
 
 
-def String(maxlen: int=None, *args, minlen: int=None, **kwargs):
+def String(maxlen: int=None, minlen: int=None,
+           args: tuple=None, as_property: bool=True, info: dict=None, **kwargs):
     """
         SQLAlchemy Column representing a string
 
         :param minlen: minimum string len
         :param maxlen: maximum string len
 
-        :param args: any positional arguments are passed to the sqlalchemy.Column constructor
+        :param as_property: Returns :class:`sqlalchemy.ColumnProperty` otherwise :class:`sqlalchemy.Column`
+        :param args: positional arguments passed to the sqlalchemy.Column constructor
+
+        :param info: Passed into info dictionary of the column for usage with form maker or similiar libaries
 
         :param kwargs: * min: passed to formencode.validators.String (and overrides minlen)
                        * max: passed to formencode.validators.String (and overrides maxlen)
@@ -43,9 +47,16 @@ def String(maxlen: int=None, *args, minlen: int=None, **kwargs):
     dwargs = dict(nullable=False, server_default='')
     dwargs.update({k: v for k, v in kwargs.items() if k not in fvargs and k not in sqargs})
 
+    args = isinstance(args, tuple) and args or [args]
+
     column = Column(sqUnicode(**sqargs), *args, **dwargs)
     column.validator = fvString(**fvargs)
 
     fmargs = {'type': 'Text', 'dataType': 'text'}
-    return column_property(column, info=fmargs)
+    fmargs.update(info and info or {})
+    if as_property:
+        return column_property(column, info=fmargs)
+    else:
+        column.info.update(fmargs)
+        return column, fmargs
 

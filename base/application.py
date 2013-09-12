@@ -54,7 +54,7 @@ class Application(Application):
         restless = RestlessManager(application=self, session_maker=self.database)
         backbone = BackboneManager(application=self)
 
-        models = [character.DbCharacter, room.DbRoom, user.DbUser]
+        models = [character.DbCharacter, room.DbRoom, room.DbRoom2Character, user.DbUser]
 
         for model in models:
             restless.create_api(model,

@@ -12,14 +12,18 @@ __author__ = 'Martin Martimeo <martin@martimeo.de>'
 __date__ = '27.05.13 - 16:45'
 
 
-def Boolean(default: bool=False, nullable=False, *args, **kwargs):
+def Boolean(default: bool=False, nullable=False,
+            args: tuple=None, as_property: bool=True, info: dict=None, **kwargs):
     """
         SQLAlchemy Column representing a boolean
 
         :param default: default of this column
         :param nullable: accept None -> NULL values
 
-        :param args: any positional arguments are passed to the :class:`sqlalchemy.Column constructor`
+        :param as_property: Returns :class:`sqlalchemy.ColumnProperty` otherwise :class:`sqlalchemy.Column`
+        :param args: positional arguments passed to the sqlalchemy.Column constructor
+
+        :param info: Passed into info dictionary of the column for usage with form maker or similiar libaries
 
         :param kwargs: * true_values: list of true string values, passed to formencode validator
                        * false_values: list of false string values, passed to formencode validator
@@ -42,8 +46,15 @@ def Boolean(default: bool=False, nullable=False, *args, **kwargs):
         dwargs['server_default'] = "%s" % int(default)
     dwargs.update({k: v for k, v in kwargs.items() if k not in fvargs and k not in sqargs})
 
+    args = isinstance(args, tuple) and args or [args]
+
     column = Column(sqBoolean(**sqargs), *args, **dwargs)
     column.validator = fvBoolean(**fvargs)
 
     fmargs = {'type': 'CheckBox'}
-    return column_property(column, info=fmargs)
+    fmargs.update(info and info or {})
+    if as_property:
+        return column_property(column, info=fmargs)
+    else:
+        column.info.update(fmargs)
+        return column, fmargs

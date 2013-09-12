@@ -21,8 +21,8 @@ def Integer(minval: int=None, maxval: int=None, default: int=None,
         :param minval: minimum allowed for value
         :param maxval: maximum allowed for value
         :param default: default value (if None, nullable becomes True)
-        :param as_property: Returns :class:`sqlalchemy.ColumnProperty` otherwise :class:`sqlalchemy.Column`
 
+        :param as_property: Returns :class:`sqlalchemy.ColumnProperty` otherwise :class:`sqlalchemy.Column`
         :param args: positional arguments passed to the sqlalchemy.Column constructor
 
         :param info: Passed into info dictionary of the column for usage with form maker or similiar libaries
