@@ -34,7 +34,7 @@ class DbUser(Base):
     name = String(maxlen=80, unique=True)
     name.doc = "Name of the User"
 
-    _room_id = Integer(ForeignKey(DbRoom._id), name="room_id", nullable=True)
+    _room_id = Integer(name="room_id", args=ForeignKey(DbRoom._id), nullable=True)
     _room_id.doc = "Room the user currently is in"
 
     room = relationship(DbRoom, backref="users")

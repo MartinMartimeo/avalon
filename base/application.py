@@ -20,8 +20,11 @@ import environment
 from tornado_menumaker import routes
 from tornado_restless import ApiManager as RestlessManager
 from tornado_backbone import ApiManager as BackboneManager
+
 from . import logger
 from .callback import after_redirect
+
+from models import metadata, character, room, user
 
 
 class Application(Application):
@@ -51,9 +54,7 @@ class Application(Application):
         restless = RestlessManager(application=self, session_maker=self.database)
         backbone = BackboneManager(application=self)
 
-        from models import character, room
-
-        models = [character.DbCharacter, room.DbRoom]
+        models = [character.DbCharacter, room.DbRoom, user.DbUser]
 
         for model in models:
             restless.create_api(model,
@@ -84,9 +85,6 @@ class Application(Application):
         else:
             engine = create_engine(dns)
         engine.connect()
-
-        #noinspection PyUnresolvedReferences
-        from models import metadata, character, room
 
         metadata.bind = engine
         metadata.create_all(engine)
