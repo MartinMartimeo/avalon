@@ -3,6 +3,7 @@
 """
 
 """
+import logging
 from formencode.validators import Int as fvInteger
 from sqlalchemy import Column
 from sqlalchemy import Integer as sqInteger
@@ -12,7 +13,8 @@ __author__ = 'Martin Martimeo <martin@martimeo.de>'
 __date__ = '16.05.13 - 18:37'
 
 
-def Integer(minval: int=None, maxval: int=None, default: int=None, *args, as_property:bool=True, info:dict=None, **kwargs):
+def Integer(minval: int=None, maxval: int=None, default: int=None,
+            args: tuple=None, as_property: bool=True, info: dict=None, **kwargs):
     """
         SQLAlchemy Column representing an integer
 
@@ -21,7 +23,7 @@ def Integer(minval: int=None, maxval: int=None, default: int=None, *args, as_pro
         :param default: default value (if None, nullable becomes True)
         :param as_property: Returns :class:`sqlalchemy.ColumnProperty` otherwise :class:`sqlalchemy.Column`
 
-        :param args: any positional arguments are passed to the sqlalchemy.Column constructor
+        :param args: positional arguments passed to the sqlalchemy.Column constructor
 
         :param info: Passed into info dictionary of the column for usage with form maker or similiar libaries
 
@@ -42,6 +44,8 @@ def Integer(minval: int=None, maxval: int=None, default: int=None, *args, as_pro
 
     dwargs = dict(nullable=default is None, default=default)
     dwargs.update({k: v for k, v in kwargs.items() if k not in fvargs and k not in sqargs})
+
+    args = isinstance(args, tuple) and args or [args]
 
     column = Column(sqInteger(**sqargs), *args, **dwargs)
     column.validator = fvInteger(**fvargs)
