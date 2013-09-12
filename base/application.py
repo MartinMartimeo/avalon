@@ -7,23 +7,21 @@
 __author__ = 'Martin Martimeo <martin@martimeo.de>'
 __date__ = '30.08.13 - 18:00'
 
-import environment
-import os
+from functools import partial
+
 import yaml
-
-from alembic.util import memoized_property
-
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session, object_session
-
+from sqlalchemy.util.langhelpers import memoized_property
+from sqlalchemy.orm import sessionmaker, scoped_session
 from tornado.web import Application
 from tornado.ioloop import IOLoop
-from tornado_menumaker import page, index, subpage, routes
 
+import environment
+from tornado_menumaker import routes
 from tornado_restless import ApiManager as RestlessManager
 from tornado_backbone import ApiManager as BackboneManager
-
 from . import logger
+from .callback import after_redirect
 
 
 class Application(Application):
@@ -37,6 +35,7 @@ class Application(Application):
             if not key.startswith("_"):
                 settings.setdefault(key, getattr(environment, key))
 
+        #noinspection PyUnresolvedReferences
         from base.handler import RequestHandler
 
         super().__init__(routes(), **settings)
@@ -57,7 +56,10 @@ class Application(Application):
         models = [character.DbCharacter, room.DbRoom]
 
         for model in models:
-            restless.create_api(model, methods=RestlessManager.METHODS_ALL)
+            restless.create_api(model,
+                                methods=RestlessManager.METHODS_ALL,
+                                postprocessor=dict(
+                                    post=[partial(after_redirect, url="/%s/show" % model.__tablename__)]))
             backbone.create_api(model)
 
     @staticmethod
@@ -83,6 +85,7 @@ class Application(Application):
             engine = create_engine(dns)
         engine.connect()
 
+        #noinspection PyUnresolvedReferences
         from models import metadata, character, room
 
         metadata.bind = engine
