@@ -1,0 +1,5 @@
+/* Dirty hack, see: https://github.com/twbs/bootstrap/issues/9862?source=cc */
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
