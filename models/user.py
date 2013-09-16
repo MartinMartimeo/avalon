@@ -27,7 +27,7 @@ class DbUser(Base):
     def __init__(self):
         super().__init__()
 
-        self.token = uuid4()
+        self.token = str(uuid4())
 
     _id = Id("user_id")
 
